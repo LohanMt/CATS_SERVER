@@ -136,7 +136,16 @@ def add_room(players_id, pos_x, pos_y, seed):
 
 @app.route('/users/<int:players_id>/rooms/<int:rooms_id>', methods=['DELETE'])
 def delete_room(players_id, rooms_id):
-    return "Not implemented", 501
+
+    sql_request = f'''SELECT * FROM cats WHERE rooms_id = "{rooms_id}"'''
+    chats = sql_select(sql_request)
+
+    if len(chats) > 0:
+        return "il y a des chats dans cette salle", 403
+    else:
+        sql_request = f'''DELETE FROM rooms WHERE players_id = "{players_id}" AND rooms_id = "{rooms_id}"'''
+        sql_delete(sql_request)
+        return "Salle supprimée", 200
 
 
 @app.route('/cats', methods=['GET'])
