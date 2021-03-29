@@ -150,7 +150,10 @@ def delete_room(players_id, rooms_id):
 
 @app.route('/cats', methods=['GET'])
 def get_free_cats():
-    return "Not implemented", 501
+    sql_request = f'''SELECT * FROM cats WHERE rooms_id IS NULL'''
+    cats_adoptables = sql_select(sql_request)
+    return jsonify(cats_adoptables)
+
 
 
 @app.route('/cats/<int:cats_id>', methods=['PATCH', 'DELETE'])
